@@ -1,0 +1,30 @@
+{
+  "name": "sharp-pad-forms",
+  "version": "0.1.0",
+  "description": "Handle actions from SharpPad output",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EdonGashi/sharp-pad-forms.git"
+  },
+  "keywords": [
+    "SharpPad",
+    "react",
+    "form",
+    "html",
+    "node"
+  ],
+  "author": "Edon Gashi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/EdonGashi/sharp-pad-forms/issues"
+  },
+  "homepage": "https://github.com/EdonGashi/sharp-pad-forms#readme",
+  "dependencies": {
+    "qs": "^6.5.1",
+    "react": "^16.2.0"
+  }
+}
