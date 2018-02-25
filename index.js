@@ -22,6 +22,7 @@ function _objectWithoutProperties(obj, keys) {
   return target;
 }
 
+const dump = require('sharp-pad-dump');
 const React = require("react");
 const http = require("http");
 const url = require("url");
@@ -29,6 +30,12 @@ const qs = require("qs");
 let id = 1;
 let handlers = {};
 let port = 5256;
+
+const oldClear = dump.clear;
+dump.clear = function () {
+  clearHandlers();
+  return oldClear.apply(dump);
+}
 
 function listen(httpPort = 5256) {
   port = httpPort;

@@ -1,6 +1,6 @@
 {
   "name": "sharp-pad-forms",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Handle actions from SharpPad output",
   "main": "index.js",
   "scripts": {
@@ -26,5 +26,8 @@
   "dependencies": {
     "qs": "^6.5.1",
     "react": "^16.2.0"
+  },
+  "peerDependencies": {
+    "sharp-pad-dump": "~0"
   }
 }
