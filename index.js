@@ -45,9 +45,9 @@ function listen(httpPort = 5256) {
   const http = require("http");
 
   const requestHandler = (request, response) => {
-    events.emit('rawRequest', request, id)
     const { query } = url.parse(request.url, true);
     const { req, id } = query;
+    events.emit('rawRequest', request, id)
     const handler = handlers[id];
     if (!handler) {
       response.statusCode = 400;

@@ -1,6 +1,6 @@
 {
   "name": "sharp-pad-forms",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Handle actions from SharpPad output",
   "main": "index.js",
   "scripts": {
