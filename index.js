@@ -218,10 +218,20 @@ class Form extends React.Component {
   }
 }
 
+function getPort() {
+  return port
+}
+
+function setPort(value) {
+  port = value
+}
+
 module.exports = {
   Action,
   Form,
   listen,
+  getPort,
+  setPort,
   events,
   clearHandlers
 };
