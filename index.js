@@ -27,9 +27,12 @@ const React = require("react");
 const http = require("http");
 const url = require("url");
 const qs = require("qs");
+const EventEmitter = require('events');
 let id = 1;
 let handlers = {};
 let port = 5256;
+
+const events = new EventEmitter();
 
 const oldClear = dump.clear;
 dump.clear = function () {
@@ -42,6 +45,7 @@ function listen(httpPort = 5256) {
   const http = require("http");
 
   const requestHandler = (request, response) => {
+    events.emit('rawRequest', request, id)
     const { query } = url.parse(request.url, true);
     const { req, id } = query;
     const handler = handlers[id];
@@ -50,8 +54,9 @@ function listen(httpPort = 5256) {
       response.end();
     }
 
-    if (req === "link") {
+    if (req === "action") {
       try {
+        events.emit('actionRequest', id)
         handler();
         response.statusCode = 200;
         response.end();
@@ -69,7 +74,9 @@ function listen(httpPort = 5256) {
         .on("end", () => {
           body = Buffer.concat(body).toString();
           try {
-            handler(qs.parse(body));
+            const data = qs.parse(body);
+            events.emit('formRequest', data, id);
+            handler(data);
             response.statusCode = 200;
             response.end();
           } catch (err) {
@@ -93,6 +100,8 @@ function listen(httpPort = 5256) {
     if (err) {
       return console.error(err);
     }
+
+    events.emit('listening', port);
   });
 
   return server;
@@ -100,6 +109,7 @@ function listen(httpPort = 5256) {
 
 function clearHandlers() {
   handlers = {};
+  events.emit('handlersCleared');
 }
 
 function getLinkScript(id) {
@@ -109,7 +119,7 @@ function getLinkScript(id) {
       link.onclick = function (e) {
         e.preventDefault()
         e.stopPropagation()
-        fetch('http://localhost:${port}?req=link&id=${id}')
+        fetch('http://localhost:${port}?req=action&id=${id}')
         return false
       }
     })()
@@ -119,6 +129,7 @@ function getLinkScript(id) {
 class Action extends React.Component {
   componentWillMount() {
     this.id = id++;
+    events.emit('newElement', 'action', id);
   }
 
   render() {
@@ -135,7 +146,7 @@ class Action extends React.Component {
       React.createElement(
         "a",
         _extends({}, props, {
-          href: `http://localhost:${port}?req=link&id=${this.id}`,
+          href: `http://localhost:${port}?req=action&id=${this.id}`,
           id: this.id
         }),
         children
@@ -179,6 +190,7 @@ function getFormScript(id) {
 class Form extends React.Component {
   componentWillMount() {
     this.id = id++;
+    events.emit('newElement', 'form', id);
   }
 
   render() {
@@ -210,5 +222,6 @@ module.exports = {
   Action,
   Form,
   listen,
+  events,
   clearHandlers
 };
